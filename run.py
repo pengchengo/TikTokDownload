@@ -10,4 +10,4 @@ with open("downLoadList.txt") as file:
         if len(t)!=0:
             os.system('python3 TikTokDownload.py -u '+ t[0] + ' -m yes')
         else:
-            print("不是分享地址:"+item)
+            os.system('python3 TikTokDownload.py -u '+ item + ' -m yes')

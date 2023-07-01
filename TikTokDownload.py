@@ -106,8 +106,14 @@ def download(video_url, music_url, video_title, music_title, headers, music, nam
 
 
 def video_download(url, music, name, headers):
-    r = requests.get(url=Find(url)[0], headers=headers)
-    key = re.findall('video/(\d+)?', str(r.url))[0]
+    findResult = re.findall('video/(\d+)?', url)
+    key = ""
+    if len(findResult) == 0:
+        r = requests.get(url=Find(url)[0], headers=headers)
+        key = re.findall('video/(\d+)?', str(r.url))[0]
+    else:
+        key = findResult[0]
+    #print(key)
     # 官方接口
     # 旧接口22/12/23失效
     # jx_url = f'https://www.iesdouyin.com/web/api/v2/aweme/iteminfo/?item_ids={self.aweme_id[i]}'

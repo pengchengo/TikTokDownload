@@ -53,7 +53,7 @@ class Updata:
 
         # 仓库版本
         try:
-            print('[   🗻   ]:获取最新版本号中!')
+            #print('[   🗻   ]:获取最新版本号中!')
             self.g_Version = int(requests.get(
                 'https://cdn.jsdelivr.net/gh/Johnserf-Seed/TikTokDownload@main/version').text)
         except:

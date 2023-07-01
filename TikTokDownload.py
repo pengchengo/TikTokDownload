@@ -19,6 +19,7 @@ import requests
 
 
 def printUsage():
+    return
     print('''
         使用方法: 1、添加为环境变量 2、输入命令
         -u<url 抖音复制的链接:https://v.douyin.com/JtcjTwo/>
@@ -71,6 +72,7 @@ def main():
 # @retry(stop_max_attempt_number=3)
 def download(video_url, music_url, video_title, music_title, headers, music, name):
     # 视频下载
+    print("开始下载视频")
     if video_url == '':
         print('[  提示  ]:该视频可能无法下载哦~\r')
         return
@@ -83,7 +85,7 @@ def download(video_url, music_url, video_title, music_title, headers, music, nam
             music_title = Util.replaceT(music_title)
             if name == "":
                 name = video_title
-            with open(f'{name}.mp4', 'wb') as f:
+            with open(f'下载/{name}.mp4', 'wb') as f:
                 f.write(r.content)
                 print('[  视频  ]:%s.mp4 下载完成\r' % name)
 
@@ -97,7 +99,7 @@ def download(video_url, music_url, video_title, music_title, headers, music, nam
             # return
         else:
             r = requests.get(url=music_url, headers=headers)
-            with open(f'{music_title}.mp3', 'wb') as f:
+            with open(f'下载/{music_title}.mp3', 'wb') as f:
                 f.write(r.content)
                 print('[  音频  ]:%s.mp3 下载完成\r' % music_title)
             # return
@@ -157,5 +159,5 @@ if __name__ == "__main__":
     # 获取headers
     headers = Util.Cookies(cmd.setting()).dyheaders
     video_download(url, music, name, headers)
-    input('[  提示  ]:按任意键退出')
-    sys.exit()
+    #input('[  提示  ]:按任意键退出')
+    #sys.exit()

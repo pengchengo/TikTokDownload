@@ -10,10 +10,11 @@ import urllib.parse
 
 nn = 1
 sun_s = 0
-gjc_name = "足球"#input("输入关键词")
-max_bofangliang = 1#int(input('点赞量'))
+gjc_name = input("输入关键词")
+max_bofangliang = int(input('点赞量'))
 key = urllib.parse.quote(gjc_name)
 # print(key)
+writeContent = ""
 while True:
     url = f'https://www.douyin.com/aweme/v1/web/general/search/single/?device_platform=webapp&aid=6383&channel=channel_pc_web&search_channel=aweme_general&sort_type=1&publish_time=0&keyword={key}&search_source=normal_search&query_correct_type=1&is_filter_search=0&from_group_id=&offset={sun_s * 10}&count=10&search_id=202209151332480101402051633D0E8650&pc_client_type=1&version_code=170400&version_name=17.4.0&cookie_enabled=true&screen_width=2560&screen_height=1080&browser_language=zh-CN&browser_platform=Win32&browser_name=Chrome&browser_version=105.0.0.0&browser_online=true&engine_name=Blink&engine_version=105.0.0.0&os_name=Windows&os_version=10&cpu_core_num=12&device_memory=8&platform=PC&downlink=10&effective_type=4g&round_trip_time=100&webid=7129806389195458082&msToken=20jBGIfrrkKSgtlRmqkkoaFZIj-hQEwWI2LVMn4kASh_Jg_VAJCVGW9q5gwmCLXQnEFn8KdqlEJxrjF7geVghbpbUDCgZS5GJhVjGsTSrXE382FG5H-sKFM=&X-Bogus=DFSzswVLF50ANydASsRgAKXAIQ-S'
     headers = {
@@ -24,35 +25,31 @@ while True:
     #
     resp = requests.get(url, headers=headers)
     respss = json.loads(resp.text)
-    writeContent = ""
     for i in respss['data'][:-1]:
         try:
             url = i['aweme_info']['video']['play_addr']['url_list'][0]
             name = i['aweme_info']['desc']
             aweme_id = i['aweme_info']['aweme_id']
             bofangliang = i['aweme_info']['statistics']['digg_count']
-            print(name)
             if bofangliang > max_bofangliang and gjc_name in name:
                 if not os.path.exists(f'./{gjc_name}'):  # 如果作者文件夹不存在，就创建
                     os.mkdir(f'./{gjc_name}')  # 如果作者文件夹不存在，就创建一个
                 video_name = name  # 获取视频名称
                 video_name = video_name.replace('\n', ' ')  # 吧\n替换成空格
                 video_name = re.sub(r'[\/:*?"<>|]', '-', video_name)  # 替换文件名中的特殊字符
-                writeContent = writeContent + "名字:"+video_name+" 播放量:"+bofangliang
-                #resp = requests.get(url)
-                #file_object = open(f'./{gjc_name}/{bofangliang}_{video_name}.mp4', mode='wb')
-                #file_object.write(resp.content)
-                #file_object.close()
+                writeContent = writeContent + "名字:"+video_name+" 播放量:"+str(bofangliang)+"\n"
+                resp = requests.get(url)
+                file_object = open(f'./{gjc_name}/{bofangliang}_{video_name}.mp4', mode='wb')
+                file_object.write(resp.content)
+                file_object.close()
                 print(f'第{nn}个视拼，名称：{bofangliang}_{video_name}')
                 nn += 1
         except:
             print("pass")
             pass
-    htmlContent = open(f"content.txt", 'wb')
-    print(writeContent)
-    htmlContent.write(writeContent.encode())
-    #htmlContent.write(str(respss).encode())
-    break
     time.sleep(5)
     sun_s += 1
     print(sun_s)
+htmlContent = open(f"content.txt", 'wb')
+print(writeContent)
+htmlContent.write(writeContent.encode())
